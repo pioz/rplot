@@ -1,9 +1,0 @@
-#!/usr/bin/ruby
-
-require 'lib/rplot.rb'
-
-Rplot.set_param('BG_COLOR', 'orange')
-bao = Rplot.new('gif', 'ciccio.png', 'ciccio.gif', 'ciccio.png')
-bao.test
-bao.delete
-
