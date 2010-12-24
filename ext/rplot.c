@@ -1,10 +1,21 @@
+/***********************************************************
+ * Copyright (C) 2011 Enrico Pilotto (enrico@megiston.it)
+ *
+ * Binding all functions of C libplot in 'Rplot' Ruby class.
+ ***********************************************************/
+
 #include "rplot.h"
 
 static int
 get_handler (VALUE self)
 {
   int handler = NUM2INT (rb_iv_get (self, "@handler"));
-  pl_selectpl (handler);
+  int last_selected = pl_selectpl (handler);
+  if (last_selected < 0)
+    {
+      fprintf (stderr, "Couldn't select Plotter\n");
+      return last_selected;
+    }
   return handler;
 }
 
@@ -34,34 +45,37 @@ newpl (VALUE self, VALUE type, VALUE in_path, VALUE out_path, VALUE err_path)
   if (handler < 0)
     {
       fprintf (stderr, "Couldn't create Plotter\n");
-      return 1;
+      return INT2FIX (handler);
     }
   rb_iv_set (self, "@handler", INT2NUM (handler));
   return self;
 }
 
-// No needed
-// static VALUE selectpl (VALUE self) {}
+// static VALUE
+// selectpl (VALUE self)
+// {
+//   No need to bind this function.
+//   Use an object-oriented style.
+// }
 
 static VALUE
 deletepl (VALUE self) {
   int handler = get_handler (self);
-  //pl_closepl ();
-  if (pl_closepl () < 0)
+  int err = pl_closepl ();
+  if (err < 0)
     {
       fprintf (stderr, "Couldn't close Plotter\n");
-      return 1;
+      return INT2FIX (err);
     }
   pl_selectpl (0);
   pl_deletepl (handler);
-  return Qnil;
+  return INT2FIX (0);
 }
 
 static VALUE
 parampl (VALUE self, VALUE param, VALUE value)
 {
-  pl_parampl (StringValuePtr (param), (void*)(StringValuePtr (value)));
-  return Qnil;
+  return INT2FIX (pl_parampl (StringValuePtr (param), (void*)(StringValuePtr (value))));
 }
 
 /* Setup functions */
@@ -69,7 +83,10 @@ parampl (VALUE self, VALUE param, VALUE value)
 static VALUE
 openpl (VALUE self)
 {
-  return INT2FIX (pl_openpl ());
+  int err = pl_openpl ();
+  if (err < 0)
+    fprintf (stderr, "Couldn't open Plotter\n");
+  return INT2FIX (err);
 }
 
 static VALUE
@@ -606,6 +623,10 @@ fpointrel (VALUE self, VALUE x, VALUE y)
 
 /* Attribute-setting functions */
 
+/* Mapping functions */
+
+/* TEST FUNCTIONS */
+
 static VALUE
 test (VALUE self) {
 
@@ -645,7 +666,7 @@ Init_rplot()
   VALUE rplot = rb_define_class("Rplot", rb_cObject);
   rb_define_method(rplot, "initialize", newpl, 4);
   rb_define_method(rplot, "delete", deletepl, 0);
-  rb_define_singleton_method(rplot, "set_param", parampl, 2);
+  rb_define_singleton_method(rplot, "param", parampl, 2);
 
   rb_define_method(rplot, "test", test, 0);
 }
