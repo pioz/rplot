@@ -702,21 +702,23 @@ joinmod (VALUE self, VALUE s)
 {
   return INT2FIX (pl_joinmod (StringValuePtr (s)));
 }
-/*
+
 static VALUE
 linedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  return INT2FIX (pl_linedash (FIX2INT (dashes),
+  return INT2FIX (pl_linedash (FIX2INT (n),
+                               DATA_PTR (dashes),
                                FIX2INT (offset)));
 }
 
 static VALUE
 flinedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  return INT2FIX (pl_flinedash (NUM2DBL (dashes),
+  return INT2FIX (pl_flinedash (FIX2INT (n),
+                                DATA_PTR (dashes),
                                 NUM2DBL (offset)));
 }
-*/
+
 static VALUE
 linemod (VALUE self, VALUE s)
 {
