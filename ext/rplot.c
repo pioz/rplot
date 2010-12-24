@@ -93,8 +93,8 @@ static VALUE
 bgcolor (VALUE self, VALUE red, VALUE green, VALUE blue)
 {
   return INT2FIX (pl_bgcolor (FIX2INT (red),
-                              FIX2INT (red),
-                              FIX2INT (red)));
+                              FIX2INT (green),
+                              FIX2INT (blue)));
 }
 
 static VALUE
@@ -622,6 +622,184 @@ fpointrel (VALUE self, VALUE x, VALUE y)
 }
 
 /* Attribute-setting functions */
+
+static VALUE
+capmod (VALUE self, VALUE s)
+{
+  return INT2FIX (pl_capmod (StringValuePtr (s)));
+}
+
+static VALUE
+color (VALUE self, VALUE red, VALUE green, VALUE blue)
+{
+  return INT2FIX (pl_color (FIX2INT (red),
+                            FIX2INT (green),
+                            FIX2INT (blue)));
+}
+
+static VALUE
+colorname (VALUE self, VALUE name)
+{
+  return INT2FIX (pl_colorname (StringValuePtr (name)));
+}
+
+static VALUE
+fillcolor (VALUE self, VALUE red, VALUE green, VALUE blue)
+{
+  return INT2FIX (pl_fillcolor (FIX2INT (red),
+                                FIX2INT (green),
+                                FIX2INT (blue)));
+}
+
+static VALUE
+fillcolorname (VALUE self, VALUE name)
+{
+  return INT2FIX (pl_fillcolorname (StringValuePtr (name)));
+}
+
+static VALUE
+fillmod (VALUE self, VALUE s)
+{
+  return INT2FIX (pl_fillmod (StringValuePtr (s)));
+}
+
+static VALUE filltype (VALUE self, VALUE level)
+{
+  return INT2FIX (pl_filltype (FIX2INT (level)));
+}
+
+static VALUE
+fmiterlimit (VALUE self, VALUE limit)
+{
+  return INT2FIX (pl_fmiterlimit (NUM2DBL (limit)));
+}
+
+static VALUE
+fontname (VALUE self, VALUE font_name)
+{
+  return INT2FIX (pl_fontname (StringValuePtr (font_name)));
+}
+
+static VALUE
+ffontname (VALUE self, VALUE font_name)
+{
+  return DBL2NUM (pl_ffontname (StringValuePtr (font_name)));
+}
+
+static VALUE
+fontsize (VALUE self, VALUE size)
+{
+  return INT2FIX (pl_fontsize (FIX2INT (size)));
+}
+
+static VALUE ffontsize (VALUE self, VALUE size)
+{
+  return DBL2NUM (pl_ffontsize (NUM2DBL (size)));
+}
+
+static VALUE
+joinmod (VALUE self, VALUE s)
+{
+  return INT2FIX (pl_joinmod (StringValuePtr (s)));
+}
+/*
+static VALUE
+linedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
+{
+  return INT2FIX (pl_linedash (FIX2INT (dashes),
+                               FIX2INT (offset)));
+}
+
+static VALUE
+flinedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
+{
+  return INT2FIX (pl_flinedash (NUM2DBL (dashes),
+                                NUM2DBL (offset)));
+}
+*/
+static VALUE
+linemod (VALUE self, VALUE s)
+{
+  return INT2FIX (pl_linemod (StringValuePtr (s)));
+}
+
+static VALUE
+linewidth (VALUE self, VALUE size)
+{
+  return INT2FIX (pl_linewidth (FIX2INT (size)));
+}
+
+static VALUE
+flinewidth (VALUE self, VALUE size)
+{
+  return INT2FIX (pl_flinewidth (NUM2DBL (size)));
+}
+
+static VALUE
+move (VALUE self, VALUE x, VALUE y)
+{
+  return INT2FIX (pl_move (FIX2INT (x),
+                           FIX2INT (y)));
+}
+
+static VALUE
+fmove (VALUE self, VALUE x, VALUE y)
+{
+  return INT2FIX (pl_fmove (NUM2DBL (x),
+                            NUM2DBL (y)));
+}
+
+static VALUE
+moverel (VALUE self, VALUE x, VALUE y)
+{
+  return INT2FIX (pl_moverel (FIX2INT (x),
+                              FIX2INT (y)));
+}
+
+static VALUE
+fmoverel (VALUE self, VALUE x, VALUE y)
+{
+  return INT2FIX (pl_fmoverel (NUM2DBL (x),
+                               NUM2DBL (y)));
+}
+
+static VALUE
+pencolor (VALUE self, VALUE red, VALUE green, VALUE blue)
+{
+  return INT2FIX (pl_pencolor (FIX2INT (red),
+                               FIX2INT (green),
+                               FIX2INT (blue)));
+}
+
+static VALUE
+pencolorname (VALUE self, VALUE name)
+{
+  return INT2FIX (pl_pencolorname (StringValuePtr (name)));
+}
+
+static VALUE
+restorestate (VALUE self)
+{
+  return INT2FIX (pl_restorestate ());
+}
+
+static VALUE
+savestate (VALUE self)
+{
+  return INT2FIX (pl_savestate ());
+}
+
+static VALUE
+textangle (VALUE self, VALUE angle)
+{
+  return INT2FIX (pl_textangle (FIX2INT (angle)));
+}
+
+static VALUE
+ftextangle (VALUE self, VALUE angle)
+{
+  return DBL2NUM (pl_ftextangle (NUM2DBL (angle)));
+}
 
 /* Mapping functions */
 
