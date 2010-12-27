@@ -6,15 +6,21 @@
 
 #include "rplot.h"
 
+#define CREATE_PLOTTER_ERROR -1
+#define SELECT_PLOTTER_ERROR -2
+#define OPEN_PLOTTER_ERROR   -3
+#define CLOSE_PLOTTER_ERROR  -4
+#define DELETE_PLOTTER_ERROR -5
+#define OPERATION_ERROR      -6
+
 static int
 get_handler (VALUE self)
 {
   int handler = NUM2INT (rb_iv_get (self, "@handler"));
-  int last_selected = pl_selectpl (handler);
-  if (last_selected < 0)
+  if (pl_selectpl (handler) < 0)
     {
       fprintf (stderr, "Couldn't select Plotter\n");
-      return last_selected;
+      return SELECT_PLOTTER_ERROR;
     }
   return handler;
 }
@@ -45,7 +51,7 @@ newpl (VALUE self, VALUE type, VALUE in_path, VALUE out_path, VALUE err_path)
   if (handler < 0)
     {
       fprintf (stderr, "Couldn't create Plotter\n");
-      return INT2FIX (handler);
+      return INT2FIX (CREATE_PLOTTER_ERROR);
     }
   rb_iv_set (self, "@handler", INT2NUM (handler));
   return self;
@@ -61,14 +67,16 @@ newpl (VALUE self, VALUE type, VALUE in_path, VALUE out_path, VALUE err_path)
 static VALUE
 deletepl (VALUE self) {
   int handler = get_handler (self);
-  int err = pl_closepl ();
-  if (err < 0)
+  if (pl_closepl () < 0)
     {
       fprintf (stderr, "Couldn't close Plotter\n");
-      return INT2FIX (err);
+      return INT2FIX (CLOSE_PLOTTER_ERROR);
     }
   pl_selectpl (0);
-  pl_deletepl (handler);
+  if (pl_deletepl (handler) < 0)
+    {
+      return INT2FIX (DELETE_PLOTTER_ERROR);
+    }
   return INT2FIX (0);
 }
 
@@ -83,10 +91,9 @@ parampl (VALUE self, VALUE param, VALUE value)
 static VALUE
 openpl (VALUE self)
 {
-  int err = pl_openpl ();
-  if (err < 0)
+  if (pl_openpl () < 0)
     fprintf (stderr, "Couldn't open Plotter\n");
-  return INT2FIX (err);
+  return INT2FIX (OPEN_PLOTTER_ERROR);
 }
 
 static VALUE
@@ -164,7 +171,9 @@ flushpl (VALUE self)
 static VALUE
 closepl (VALUE self)
 {
-  return INT2FIX (pl_closepl ());
+  if (pl_closepl () < 0)
+    fprintf (stderr, "Couldn't close Plotter\n");
+  return INT2FIX (CLOSE_PLOTTER_ERROR);
 }
 
 
@@ -813,9 +822,8 @@ test (VALUE self) {
   int angle = 0;
 
   /* create an X Plotter with the specified parameters */
-  int handler = NUM2INT (rb_iv_get (self, "@handler"));
+  int handler = get_handler (self);
   printf ("handler: %d\n---\n", handler);
-  pl_selectpl (handler);
 
   /* open X Plotter, initialize coordinates, pen, and font */
   if (pl_openpl () < 0)

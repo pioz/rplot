@@ -1,7 +1,9 @@
+.DS_Store
 pkg/*
 *.gem
 .bundle
 bin
 ext/Makefile
+ext/*.bundle
 ext/*.o
 ext/*.so
