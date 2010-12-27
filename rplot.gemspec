@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.name        = "rplot"
   s.version     = Rplot::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Enrico Pilotto"]
+  s.email       = ["enrico@megiston.it"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
+  s.summary     = %q{Ruby extension for GNU libplot}
   s.description = %q{TODO: Write a gem description}
 
   s.rubyforge_project = "rplot"
