@@ -814,6 +814,37 @@ ftextangle (VALUE self, VALUE angle)
 
 /* Mapping functions */
 
+static VALUE
+fconcat (VALUE self, VALUE m0, VALUE m1, VALUE m2, VALUE m3, VALUE tx, VALUE ty)
+{
+  return INT2FIX (pl_fconcat (NUM2DBL (m0),
+                              NUM2DBL (m1),
+                              NUM2DBL (m2),
+                              NUM2DBL (m3),
+                              NUM2DBL (tx),
+                              NUM2DBL (ty)));
+}
+
+static VALUE
+frotate (VALUE self, VALUE theta)
+{
+  return INT2FIX (pl_frotate (NUM2DBL (theta)));
+}
+
+static VALUE
+fscale (VALUE self, VALUE sx, VALUE sy)
+{
+  return INT2FIX (pl_fscale (NUM2DBL (sx),
+                             NUM2DBL (sy)));
+}
+
+static VALUE
+ftranslate (VALUE self, VALUE tx, VALUE ty)
+{
+  return INT2FIX (pl_ftranslate (NUM2DBL (tx),
+                                 NUM2DBL (ty)));
+}
+
 /* TEST FUNCTIONS */
 
 static VALUE
