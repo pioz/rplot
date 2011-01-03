@@ -948,7 +948,36 @@ Init_rplot ()
   rb_define_method (rplot, "fpoint", fpoint, 2);
   rb_define_method (rplot, "pointrel", pointrel, 2);
   rb_define_method (rplot, "fpointrel", fpointrel, 2);
-
+  /* Attribute-setting functions */
+  rb_define_method (rplot, "capmod", capmod, 1);
+  rb_define_method (rplot, "color", color, 3);
+  rb_define_method (rplot, "colorname", colorname, 1);
+  rb_define_method (rplot, "fillcolor", fillcolor, 3);
+  rb_define_method (rplot, "fillcolorname", fillcolorname, 1);
+  rb_define_method (rplot, "fillmod", fillmod, 1);
+  rb_define_method (rplot, "filltype", filltype, 1);
+  rb_define_method (rplot, "fmiterlimit", fmiterlimit, 1);
+  rb_define_method (rplot, "fontname", fontname, 1);
+  rb_define_method (rplot, "ffontname", ffontname, 1);
+  rb_define_method (rplot, "fontsize", fontsize, 1);
+  rb_define_method (rplot, "ffontsize", ffontsize, 1);
+  rb_define_method (rplot, "joinmod", joinmod, 1);
+  rb_define_method (rplot, "linedash", linedash, 3);
+  rb_define_method (rplot, "flinedash", flinedash, 3);
+  rb_define_method (rplot, "linemod", linemod, 1);
+  rb_define_method (rplot, "linewidth", linewidth, 1);
+  rb_define_method (rplot, "flinewidth", flinewidth, 1);
+  rb_define_method (rplot, "move", move, 2);
+  rb_define_method (rplot, "fmove", fmove, 2);
+  rb_define_method (rplot, "moverel", moverel, 2);
+  rb_define_method (rplot, "fmoverel", fmoverel, 2);
+  rb_define_method (rplot, "pencolor", pencolor, 3);
+  rb_define_method (rplot, "pencolorname", pencolorname, 1);
+  rb_define_method (rplot, "restorestate", restorestate, 0);
+  rb_define_method (rplot, "savestate", savestate, 0);
+  rb_define_method (rplot, "textangle", textangle, 1);
+  rb_define_method (rplot, "ftextangle", ftextangle, 1);
+  /* Mapping functions */
   rb_define_method (rplot, "test", test, 0);
 }
 
