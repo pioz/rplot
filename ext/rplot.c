@@ -978,6 +978,9 @@ Init_rplot ()
   rb_define_method (rplot, "textangle", textangle, 1);
   rb_define_method (rplot, "ftextangle", ftextangle, 1);
   /* Mapping functions */
-  rb_define_method (rplot, "test", test, 0);
+  rb_define_method (rplot, "fconcat", fconcat, 6);
+  rb_define_method (rplot, "frotate", frotate, 1);
+  rb_define_method (rplot, "fscale", fscale, 2);
+  rb_define_method (rplot, "ftranslate", ftranslate, 2);
 }
 
