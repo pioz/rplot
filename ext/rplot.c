@@ -91,6 +91,7 @@ parampl (VALUE self, VALUE param, VALUE value)
 static VALUE
 openpl (VALUE self)
 {
+  get_handler (self);
   if (pl_openpl () < 0)
     fprintf (stderr, "Couldn't open Plotter\n");
   return INT2FIX (OPEN_PLOTTER_ERROR);
