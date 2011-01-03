@@ -886,7 +886,7 @@ Init_rplot ()
   rb_define_method (rplot, "initialize", newpl, 4);
   rb_define_method (rplot, "delete", deletepl, 0);
   rb_define_singleton_method (rplot, "param", parampl, 2);
-
+  /* Setup functions */
   rb_define_method (rplot, "open", openpl, 0);
   rb_define_method (rplot, "bgcolor", bgcolor, 3);
   rb_define_method (rplot, "bgcolorname", bgcolorname, 1);
@@ -898,6 +898,56 @@ Init_rplot ()
   rb_define_method (rplot, "havecap", havecap, 1);
   rb_define_method (rplot, "flush", flushpl, 0);
   rb_define_method (rplot, "close", closepl, 0);
+  /* Object-drawing functions */
+  rb_define_method (rplot, "alabel", alabel, 3);
+  rb_define_method (rplot, "arc", arc, 6);
+  rb_define_method (rplot, "farc", farc, 6);
+  rb_define_method (rplot, "arcrel", arcrel, 6);
+  rb_define_method (rplot, "farcrel", farcrel, 6);
+  rb_define_method (rplot, "bezier2", bezier2, 6);
+  rb_define_method (rplot, "fbezier2", fbezier2, 6);
+  rb_define_method (rplot, "bezier2rel", bezier2rel, 6);
+  rb_define_method (rplot, "fbezier2rel", fbezier2rel, 6);
+  rb_define_method (rplot, "bezier3", bezier3, 8);
+  rb_define_method (rplot, "fbezier3", fbezier3, 8);
+  rb_define_method (rplot, "bezier3rel", bezier3rel, 8);
+  rb_define_method (rplot, "fbezier3rel", fbezier3rel, 8);
+  rb_define_method (rplot, "box", box, 4);
+  rb_define_method (rplot, "fbox", fbox, 4);
+  rb_define_method (rplot, "boxrel", boxrel, 4);
+  rb_define_method (rplot, "fboxrel", fboxrel, 4);
+  rb_define_method (rplot, "circle", circle, 3);
+  rb_define_method (rplot, "fcircle", fcircle, 3);
+  rb_define_method (rplot, "circlerel", circlerel, 3);
+  rb_define_method (rplot, "fcirclerel", fcirclerel, 3);
+  rb_define_method (rplot, "cont", cont, 2);
+  rb_define_method (rplot, "fcont", fcont, 2);
+  rb_define_method (rplot, "contrel", contrel, 2);
+  rb_define_method (rplot, "fcontrel", fcontrel, 2);
+  rb_define_method (rplot, "ellarc", ellarc, 6);
+  rb_define_method (rplot, "fellarc", fellarc, 6);
+  rb_define_method (rplot, "ellarcrel", ellarcrel, 6);
+  rb_define_method (rplot, "fellarcrel", fellarcrel, 6);
+  rb_define_method (rplot, "ellipse", ellipse, 6);
+  rb_define_method (rplot, "fellipse", fellipse, 6);
+  rb_define_method (rplot, "ellipserel", ellipserel, 6);
+  rb_define_method (rplot, "fellipserel", fellipserel, 6);
+  rb_define_method (rplot, "endpath", endpath, 0);
+  rb_define_method (rplot, "label", label, 1);
+  rb_define_method (rplot, "labelwidth", labelwidth, 1);
+  rb_define_method (rplot, "flabelwidth", flabelwidth, 1);
+  rb_define_method (rplot, "line", line, 4);
+  rb_define_method (rplot, "fline", fline, 4);
+  rb_define_method (rplot, "linerel", linerel, 4);
+  rb_define_method (rplot, "flinerel", flinerel, 4);
+  rb_define_method (rplot, "marker", marker, 4);
+  rb_define_method (rplot, "fmarker", fmarker, 4);
+  rb_define_method (rplot, "markerrel", markerrel, 4);
+  rb_define_method (rplot, "fmarkerrel", fmarkerrel, 4);
+  rb_define_method (rplot, "point", point, 2);
+  rb_define_method (rplot, "fpoint", fpoint, 2);
+  rb_define_method (rplot, "pointrel", pointrel, 2);
+  rb_define_method (rplot, "fpointrel", fpointrel, 2);
 
   rb_define_method (rplot, "test", test, 0);
 }
