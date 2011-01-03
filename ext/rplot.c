@@ -880,13 +880,25 @@ test (VALUE self) {
 }
 
 void
-Init_rplot()
+Init_rplot ()
 {
-  VALUE rplot = rb_define_class("Rplot", rb_cObject);
-  rb_define_method(rplot, "initialize", newpl, 4);
-  rb_define_method(rplot, "delete", deletepl, 0);
-  rb_define_singleton_method(rplot, "param", parampl, 2);
+  VALUE rplot = rb_define_class ("Rplot", rb_cObject);
+  rb_define_method (rplot, "initialize", newpl, 4);
+  rb_define_method (rplot, "delete", deletepl, 0);
+  rb_define_singleton_method (rplot, "param", parampl, 2);
 
-  rb_define_method(rplot, "test", test, 0);
+  rb_define_method (rplot, "open", openpl, 0);
+  rb_define_method (rplot, "bgcolor", bgcolor, 3);
+  rb_define_method (rplot, "bgcolorname", bgcolorname, 1);
+  rb_define_method (rplot, "erase", erase, 0);
+  rb_define_method (rplot, "space", space, 4);
+  rb_define_method (rplot, "fspace", fspace, 4);
+  rb_define_method (rplot, "space2", space2, 6);
+  rb_define_method (rplot, "fspace2", fspace2, 6);
+  rb_define_method (rplot, "havecap", havecap, 1);
+  rb_define_method (rplot, "flush", flushpl, 0);
+  rb_define_method (rplot, "close", closepl, 0);
+
+  rb_define_method (rplot, "test", test, 0);
 }
 
