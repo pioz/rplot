@@ -38,4 +38,3 @@ unless find_library('plot', 'pl_newpl')
 end
 
 create_makefile('rplot/rplot')
-

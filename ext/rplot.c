@@ -6,27 +6,14 @@
 
 #include "rplot.h"
 
-#define CREATE_PLOTTER_ERROR -1
-#define SELECT_PLOTTER_ERROR -2
-#define OPEN_PLOTTER_ERROR   -3
-#define CLOSE_PLOTTER_ERROR  -4
-#define DELETE_PLOTTER_ERROR -5
-#define OPERATION_ERROR      -6
-
 static int
 get_handler (VALUE self)
 {
   int handler = NUM2INT (rb_iv_get (self, "@handler"));
   if (pl_selectpl (handler) < 0)
-    {
-      fprintf (stderr, "Couldn't select Plotter\n");
-      return SELECT_PLOTTER_ERROR;
-    }
+    rb_raise(select_plotter_error, "Couldn't select Plotter with id %d!", handler);
   return handler;
 }
-
-// BINDING
-///////////
 
 /* 4 base functions */
 
@@ -49,10 +36,7 @@ newpl (VALUE self, VALUE type, VALUE in_path, VALUE out_path, VALUE err_path)
 
   int handler = pl_newpl (StringValuePtr (type), stdin, out_file, stderr);
   if (handler < 0)
-    {
-      fprintf (stderr, "Couldn't create Plotter\n");
-      return INT2FIX (CREATE_PLOTTER_ERROR);
-    }
+    rb_raise(create_plotter_error, "Couldn't create Plotter!");
   rb_iv_set (self, "@handler", INT2NUM (handler));
   return self;
 }
@@ -67,16 +51,10 @@ newpl (VALUE self, VALUE type, VALUE in_path, VALUE out_path, VALUE err_path)
 static VALUE
 deletepl (VALUE self) {
   int handler = get_handler (self);
-  if (pl_closepl () < 0)
-    {
-      fprintf (stderr, "Couldn't close Plotter\n");
-      return INT2FIX (CLOSE_PLOTTER_ERROR);
-    }
+  pl_closepl ();
   pl_selectpl (0);
   if (pl_deletepl (handler) < 0)
-    {
-      return INT2FIX (DELETE_PLOTTER_ERROR);
-    }
+    rb_raise(delete_plotter_error, "Couldn't delete Plotter with id %d!", handler);
   return INT2FIX (0);
 }
 
@@ -93,8 +71,8 @@ openpl (VALUE self)
 {
   get_handler (self);
   if (pl_openpl () < 0)
-    fprintf (stderr, "Couldn't open Plotter\n");
-  return INT2FIX (OPEN_PLOTTER_ERROR);
+    rb_raise(open_plotter_error, "Couldn't open Plotter!");
+  return INT2FIX (0);
 }
 
 static VALUE
@@ -172,11 +150,11 @@ flushpl (VALUE self)
 static VALUE
 closepl (VALUE self)
 {
+  get_handler (self);
   if (pl_closepl () < 0)
-    fprintf (stderr, "Couldn't close Plotter\n");
-  return INT2FIX (CLOSE_PLOTTER_ERROR);
+    rb_raise(close_plotter_error, "Couldn't close Plotter!");
+  return INT2FIX (0);
 }
-
 
 /* Object-drawing functions */
 
@@ -846,44 +824,21 @@ ftranslate (VALUE self, VALUE tx, VALUE ty)
                                  NUM2DBL (ty)));
 }
 
-/* TEST FUNCTIONS */
-
-static VALUE
-test (VALUE self) {
-
-  int angle = 0;
-
-  /* create an X Plotter with the specified parameters */
-  int handler = get_handler (self);
-  printf ("handler: %d\n---\n", handler);
-
-  /* open X Plotter, initialize coordinates, pen, and font */
-  if (pl_openpl () < 0)
-    {
-      fprintf (stderr, "Couldn't open Plotter\n");
-      return 1;
-    }
-  pl_fspace (0.0, 0.0, 1.0, 1.0);  /* use normalized coordinates */
-  pl_pencolorname ("red");
-  pl_ffontsize (1.0);
-  //pl_fontname ("NewCenturySchlbk-Roman");
-
-  pl_fmove (.50,.50);           /* move to center */
-  int i = 0;
-  while (i < 100)                     /* loop endlessly */
-    {
-      pl_erase ();
-      pl_textangle (angle++);      /* set new rotation angle */
-      pl_alabel ('c', 'c', "A");   /* draw a centered `A' */
-      i++;
-    }
-  return Qnil;
-}
+/* Init rplot */
 
 void
 Init_rplot ()
 {
+  /* Define exceptions */
+  create_plotter_error    = rb_define_class ("CreatePlotterError", rb_eStandardError);
+  select_plotter_error    = rb_define_class ("SelectPlotterError", rb_eStandardError);
+  open_plotter_error      = rb_define_class ("OpenPlotterError", rb_eStandardError);
+  close_plotter_error     = rb_define_class ("ClosePlotterError", rb_eStandardError);
+  delete_plotter_error    = rb_define_class ("DeletePlotterError", rb_eStandardError);
+  operation_plotter_error = rb_define_class ("OperationPlotterError", rb_eStandardError);
+  /* Define Rplot class */
   VALUE rplot = rb_define_class ("Rplot", rb_cObject);
+  /* Base functions */
   rb_define_protected_method (rplot, "initialize", newpl, 4);
   rb_define_protected_method (rplot, "delete", deletepl, 0);
   rb_define_singleton_method (rplot, "param", parampl, 2);

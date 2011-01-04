@@ -4,6 +4,7 @@
 #include <ruby.h>
 #include <plot.h>
 #include <stdio.h>
+#include "rplot_exceptions.h"
 
 /* 4 base functions */
 
