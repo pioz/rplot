@@ -3,15 +3,15 @@ require 'ext/rplot'
 # This class rappresents a Plotter.
 #
 # The graphical objects that libplot can draw include paths, circles and
-# ellipses, points, markers, and _adjusted labels_ (justified text strings). A
-# path is a sequence of line segments, circular arcs, elliptic arcs, quadratic
-# Bezier curves, and/or cubic Bezier curves. Paths may be open or closed.
-# User-specified filling of paths, circles, and ellipses is supported (fill
-# rule and fill color, as well as pen color, may be specified). There is
-# support for maintaining a Postscript-style stack of graphics contexts, i.e.,
-# a stack of drawing attribute sets. Path-related attributes include line
-# thickness, line type, cap type, and join type, and text-related attributes
-# include font name, font size, and text angle.
+# ellipses, points, markers, and <i>adjusted labels</i> (justified text
+# strings). A path is a sequence of line segments, circular arcs, elliptic
+# arcs, quadratic Bezier curves, and/or cubic Bezier curves. Paths may be open
+# or closed. User-specified filling of paths, circles, and ellipses is
+# supported (fill rule and fill color, as well as pen color, may be specified).
+# There is support for maintaining a Postscript-style stack of graphics
+# contexts, i.e., a stack of drawing attribute sets. Path-related attributes
+# include line thickness, line type, cap type, and join type, and text-related
+# attributes include font name, font size, and text angle.
 #
 # The fundamental abstraction provided is that of a Plotter. A Plotter is an
 # object with an interface for the drawing of vector graphics which is similar
@@ -29,16 +29,16 @@ require 'ext/rplot'
 #
 # [X Plotters] An X Plotter, when opened, pops up a window on an X Window
 #              System display and draws graphics in it. The window will be
-#              _spun off_ when the Plotter is closed; if it is subsequently
-#              reopened, a new window will be popped up. A spun-off window will
-#              remain on the screen but will vanish if you type +q+ or click
-#              your mouse in it. Future releases may permit X Plotters, when
-#              reopened, to reuse an existing window.
+#              <i>spun off</i> when the Plotter is closed; if it is
+#              subsequently reopened, a new window will be popped up. A
+#              spun-off window will remain on the screen but will vanish if you
+#              type +q+ or click your mouse in it. Future releases may permit X
+#              Plotters, when reopened, to reuse an existing window.
 # [X Drawable Plotters] An X Drawable Plotter draws graphics in one or two
 #                       specified drawables associated with an X Window System
 #                       display. A _drawable_ is either a window or a pixmap.
-# [PNM Plotters] A PNM Plotter produces a single page of output in _portable
-#                anymap_ format, and directs it to a file or other specified
+# [PNM Plotters] A PNM Plotter produces a single page of output in <i>portable
+#                anymap</i> format, and directs it to a file or other specified
 #                output stream. There are three types of portable anymap: PBM
 #                (portable bitmap, for monochrome graphics), PGM (portable
 #                graymap), and PPM (portable pixmap, for colored graphics).
@@ -90,7 +90,7 @@ require 'ext/rplot'
 # [Metafile Plotters] A Metafile Plotter produces output in GNU graphics
 #                     metafile format and directs it to a file or other
 #                     specified output stream. This format is an extended
-#                     version of the _plot(5)_ format found on some other
+#                     version of the <i>plot(5)</i> format found on some other
 #                     operating systems.
 #
 # A distinction among these types of Plotter is that all except X and X
@@ -109,9 +109,9 @@ require 'ext/rplot'
 # types of Plotter are not real-time, since their output streams can only be
 # emitted after all functions have been called. For PNM and GIF Plotters, this
 # is because the bitmap must be constructed before it is written out. For
-# Illustrator and Postscript Plotters, it is because a _bounding box_ line must
-# be placed at the head of the output file. For a Fig Plotter, it is because
-# color definitions must be placed at the head of the output file.
+# Illustrator and Postscript Plotters, it is because a <i>bounding box</i> line
+# must be placed at the head of the output file. For a Fig Plotter, it is
+# because color definitions must be placed at the head of the output file.
 #
 # The most important operations supported by any Plotter are +open+ and
 # +close+, which open and close it. Graphics may be drawn, and drawing
@@ -133,12 +133,12 @@ require 'ext/rplot'
 # GIF, Illustrator and Fig formats support only a single page of graphics.
 #
 # There are several other basic operations which any Plotter supports. The
-# _graphics display_ drawn in by a Plotter is a square or rectangular region on
-# a display device. But when using any Plotter to draw graphics, a user will
-# specify the coordinates of graphical objects in device-independent _user
-# coordinates_, rather than in device coordinates. A Plotter relates the user
-# coordinate system to the device coordinate system by performing an affine
-# transformation, which must be specified by the user.
+# <i>graphics display</i> drawn in by a Plotter is a square or rectangular
+# region on a display device. But when using any Plotter to draw graphics, a
+# user will specify the coordinates of graphical objects in device-independent
+# <i>user coordinates</i>, rather than in device coordinates. A Plotter relates
+# the user coordinate system to the device coordinate system by performing an
+# affine transformation, which must be specified by the user.
 #
 # Immediately after invoking +open+ to open a Plotter, an application should
 # invoke the +space+ operation to initialize this transformation. This
@@ -268,10 +268,10 @@ class Plotter < Rplot
   #                      to draw with a fixed set of pens, specified by setting
   #                      the +HPGL_PENS+ parameter. "yes" means that pen colors
   #                      will not restricted to the palette specified in
-  #                      +HPGL_PENS+: colors will be assigned to _logical pens_
-  #                      in the range #1...#31, as needed. Other than color
-  #                      LaserJet printers and DesignJet plotters, not many
-  #                      HP-GL/2 devices allow the assignment of colors to
+  #                      +HPGL_PENS+: colors will be assigned to <i>logical
+  #                      pens</i> in the range #1...#31, as needed. Other than
+  #                      color LaserJet printers and DesignJet plotters, not
+  #                      many HP-GL/2 devices allow the assignment of colors to
   #                      logical pens. So this parameter should be used with
   #                      caution.
   # [HPGL_OPAQUE_MODE] (Default "yes".) Relevant only to HP-GL Plotters, and
@@ -316,12 +316,12 @@ class Plotter < Rplot
   #                less than "2" then the only available fonts will be vector
   #                fonts, and all paths will be drawn with a default thickness,
   #                so that invoking capmod, joinmod, and fmiterlimit will have
-  #                no effect. Also, the _nonzero winding number rule_ will not
-  #                be supported when filling paths, so invoking fillmod will
-  #                have no effect. Additionally, if the version is "1" then the
-  #                filling of arbitrary paths will not be supported (circles
-  #                and rectangles aligned with the coordinate axes may be
-  #                filled, however).
+  #                no effect. Also, the <i>nonzero winding number rule</i> will
+  #                not be supported when filling paths, so invoking fillmod
+  #                will have no effect. Additionally, if the version is "1"
+  #                then the filling of arbitrary paths will not be supported
+  #                (circles and rectangles aligned with the coordinate axes
+  #                may be filled, however).
   # [HPGL_XOFFSET, HPGL_YOFFSET] (Defaults "0.0cm" and "0.0cm".) Relevant only
   #                              to HP-GL Plotters. Adjustments, in the x and y
   #                              directions, of the position of the graphics
@@ -353,13 +353,13 @@ class Plotter < Rplot
   # [PCL_ASSIGN_COLORS] (Default "no".) Relevant only to PCL Plotters. "no"
   #                     means to draw with a fixed set of pens. "yes" means
   #                     that pen colors will not restricted to this palette:
-  #                     colors will be assigned to _logical pens_, as needed.
-  #                     Other than color LaserJet printers, not many PCL 5
-  #                     devices allow the assignment of colors to logical pens.
-  #                     So this parameter should be used with caution.
+  #                     colors will be assigned to <i>logical pens</i>, as
+  #                     needed. Other than color LaserJet printers, not many
+  #                     PCL 5 devices allow the assignment of colors to logical
+  #                     pens. So this parameter should be used with caution.
   # [PCL_BEZIERS] (Default "yes".) Relevant only to PCL Plotters. "yes" means
-  #               that when drawing Bezier curves, the special _Bezier
-  #               instructions_ will be used. "no" means that these
+  #               that when drawing Bezier curves, the special <i>Bezier
+  #               instructions</i> will be used. "no" means that these
   #               instructions will not be used. Instead, each Bezier curve
   #               will be approximated and drawn as a polygonal line. Other
   #               than the LaserJet III, which was Hewlett--Packard's first PCL
@@ -408,8 +408,8 @@ class Plotter < Rplot
   #        supported). The _dotdotdashed_ line style will be supported, which
   #        is also not normally the case. After drawing graphics, the Plotter
   #        will emit an escape sequence that returns the emulator to VT100
-  #        mode. The key sequence _ALT minus_ may be employed manually within
-  #        kermit to switch between the two modes.
+  #        mode. The key sequence <i>ALT minus</i> may be employed manually
+  #        within kermit to switch between the two modes.
   # [TRANSPARENT_COLOR] (Default "none".) Relevant only to GIF Plotters. If the
   #                     value is a recognized color name, that color, if it
   #                     appears in the pseudo-GIF output file, will be treated
@@ -417,10 +417,10 @@ class Plotter < Rplot
   #                     files. For information on what names are recognized,
   #                     see section Specifying Colors by Name. If
   #                     +TRANSPARENT_COLOR+ is set and an animated pseudo-GIF
-  #                     file is produced, the _restore to background_ disposal
-  #                     method will be used for each image in the file.
-  #                     Otherwise, the _unspecified_ disposal method will be
-  #                     used.
+  #                     file is produced, the <i>restore to background</i>
+  #                     disposal method will be used for each image in the
+  #                     file. Otherwise, the _unspecified_ disposal method will
+  #                     be used.
   # [USE_DOUBLE_BUFFERING] (Default "no".) Relevant only to X Plotters and X
   #                        Drawable Plotters. If the value is "yes", a double
   #                        buffering scheme will be used when drawing graphics.
@@ -548,8 +548,8 @@ class Plotter < Rplot
   # "yes". In this case, objects will be written to an off-screen buffer rather
   # than to the graphics display, and invoking erase will (1) copy the contents
   # of this buffer to the display, and (2) erase the buffer by filling it with
-  # the background color. This _double buffering_ feature facilitates smooth
-  # animation.
+  # the background color. This <i>double buffering</i> feature facilitates
+  # smooth animation.
   def erase
     super
   end
@@ -562,6 +562,55 @@ class Plotter < Rplot
   # after +open+ is invoked. Default is 0,0,1,1.
   def space(x0, y0, x1, y1)
     fspace(x0.to_f, y0.to_f, x1.to_f, y1.to_f)
+  end
+
+  # +space2+ are extended versions of +space+, and may be used instead. Their
+  # arguments are the three defining vertices of an <i>affine window</i> (a
+  # drawing parallelogram), in user coordinates. The specified vertices are the
+  # lower left, the lower right, and the upper left. This window will be mapped
+  # affinely onto the graphics display.
+  def space2(x0, y0, x1, y1, x2, y2)
+    fspace2(x0.to_f, y0.to_f, x1.to_f, y1.to_f, x2.to_f, y2.to_f)
+  end
+
+  # +havecap+ tests whether or not a Plotter, which need not be open, has a
+  # specified capability. The return value is 0, 1, or 2, signifying
+  # no/yes/maybe. For unrecognized capabilities the return value is zero.
+  # Recognized capabilities include:
+  # [WIDE_LINES] The ability to draw lines with a non-default thickness
+  # [DASH_ARRAY] The ability to draw in arbitrary dashing styles, as requested
+  #              by the linedash function)
+  # [SETTABLE_BACKGROUND] The ability to set the color of the background
+  # [SOLID_FILL]
+  # The "HERSHEY_FONTS", "PS_FONTS", "PCL_FONTS", and "STICK_FONTS"
+  # capabilities indicate whether or not fonts of a particular class are
+  # supported. All Plotters except Tektronix Plotters have the "SOLID_FILL"
+  # capability, meaning they can fill paths with solid color. Each such Plotter
+  # has at least one of the "EVEN_ODD_FILL" and "NONZERO_WINDING_NUMBER_FILL"
+  # capabilities. These indicate the supported rules for determining the
+  # _inside_ of a path. The _maybe_ value is returned for most capabilities by
+  # Metafile Plotters, which do no drawing themselves. The output of a Metafile
+  # Plotter must be translated to another format, or displayed, by invoking
+  # plot.
+  def havecap(s)
+    super(s.to_s)
+  end
+
+  # +flush+ flushes (i.e., pushes onward) all plotting commands to the display
+  # device. This is useful only if the currently selected Plotter does
+  # real-time plotting, since it may be used to ensure that all previously
+  # plotted objects have been sent to the display and are visible to the user.
+  # It has no effect on Plotters that do not do real-time plotting.
+  def flush
+    super
+  end
+
+  # +close+ closes a Plotter, i.e., ends a page of graphics.
+  #
+  # +ClosePlotterError+ exception will be raise if the Plotter could not be
+  # close.
+  def close
+    super
   end
 
   def line(x0, y0, x1, y1)
