@@ -86,18 +86,21 @@ bgcolor (VALUE self, VALUE red, VALUE green, VALUE blue)
 static VALUE
 bgcolorname (VALUE self, VALUE name)
 {
+  get_handler (self);
   return INT2FIX (pl_bgcolorname (StringValuePtr (name)));
 }
 
 static VALUE
 erase (VALUE self)
 {
+  get_handler (self);
   return INT2FIX (pl_erase ());
 }
 
 static VALUE
 space (VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
 {
+  get_handler (self);
   return INT2FIX (pl_space (FIX2INT (x0),
                             FIX2INT (y0),
                             FIX2INT (x1),
@@ -107,6 +110,7 @@ space (VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
 static VALUE
 fspace (VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
 {
+  get_handler (self);
   return INT2FIX (pl_fspace (NUM2DBL (x0),
                              NUM2DBL (y0),
                              NUM2DBL (x1),
@@ -114,7 +118,7 @@ fspace (VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
 }
 
 static VALUE
-space2(VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
+space2 (VALUE self, VALUE x0, VALUE y0, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
 {
   return INT2FIX (pl_space2 (FIX2INT (x0),
                              FIX2INT (y0),
@@ -435,7 +439,8 @@ ellarcrel (VALUE self, VALUE xc, VALUE yc, VALUE x0, VALUE y0, VALUE x1, VALUE y
                                 FIX2INT (y1)));
 }
 
-static VALUE fellarcrel (VALUE self, VALUE xc, VALUE yc, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
+static VALUE
+fellarcrel (VALUE self, VALUE xc, VALUE yc, VALUE x0, VALUE y0, VALUE x1, VALUE y1)
 {
   return INT2FIX (pl_fellarcrel (NUM2DBL (xc),
                                  NUM2DBL (yc),
@@ -512,7 +517,8 @@ flabelwidth (VALUE self, VALUE s)
 static VALUE
 line (VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
 {
-  return INT2FIX (pl_boxrel (FIX2INT (x1),
+  get_handler (self);
+  return INT2FIX (pl_line (FIX2INT (x1),
                              FIX2INT (y1),
                              FIX2INT (x2),
                              FIX2INT (y2)));
@@ -521,6 +527,7 @@ line (VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
 static VALUE
 fline (VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
 {
+  get_handler (self);
   return INT2FIX (pl_fline (NUM2DBL (x1),
                             NUM2DBL (y1),
                             NUM2DBL (x2),
