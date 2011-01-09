@@ -613,8 +613,31 @@ class Plotter < Rplot
     super
   end
 
+  # +alabel+ takes three arguments +horiz_justify+, +vert_justify+, and +s+,
+  # which specify an <i>adjusted label</i>, i.e., a justified text string. The
+  # path under construction (if any) is ended, and the string +s+ is drawn
+  # according to the specified justifications. If +horiz_justify+ is equal to
+  # +"l"+, +"c"+, or +"r"+, then the string will be drawn with left, center or
+  # right justification, relative to the current graphics cursor position. If
+  # +vert_justify+ is equal to +"b"+, +"x"+, +"c"+, or +"t"+, then the bottom,
+  # baseline, center or top of the string will be placed even with the current
+  # graphics cursor position. The graphics cursor is moved to the right end of
+  # the string if left justification is specified, and to the left end if right
+  # justification is specified. The string may contain escape sequences of
+  # various sorts, though it should not contain line feeds or carriage returns.
+  # In fact it should include only printable characters, from the byte ranges
+  # 0x20...0x7e and 0xa0...0xff. The string may be plotted at a nonzero angle,
+  # if textangle has been called.
+  def alabel(horiz_justify, vert_justify, s)
+    horiz_justify = horiz_justify.getbyte(0) if horiz_justify.class == String
+    vert_justify = vert_justify.getbyte(0) if vert_justify.class == String
+    super(horiz_justify, vert_justify, s.to_s)
+  end
+
+
   def line(x0, y0, x1, y1)
     fline(x0.to_f, y0.to_f, x1.to_f, y1.to_f)
   end
 
 end
+
