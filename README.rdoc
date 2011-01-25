@@ -26,19 +26,67 @@ install plotutils</tt>.
 
 == Usage
 
-Here two little examples:
+Here two little examples.
 
-    line1
-    line2
-    ...
-    TODO
+The first invokes rplot operations to draw vector graphics. It draws
+an intricate and beautiful path (Bill Gosper's "C" curve, discussed as
+Item #135 in HAKMEM, MIT Artificial Intelligence Laboratory Memo #239,
+1972). As the numeric constant MAXORDER (here equal to 12) is
+increased, the path will take on the shape of a curly letter "C",
+which is the envelope of a myriad of epicyclic octagons.
 
-and
+    require 'rubygems'
+    require 'rplot'
 
-    line1
-    line2
-    ...
-    TODO
+    module MyCurve
+      MAXORDER = 12
+      def draw_curve(dx, dy, order)
+        if order >= MAXORDER
+          self.cont(dx, dy, :rel => true)
+        else
+          self.draw_curve(0.5*(dx-dy), 0.5*(dx+dy), order+1)
+          self.draw_curve(0.5*(dx+dy), 0.5*(dy-dx), order+1)
+        end
+      end
+    end
+    Plotter.send(:include, MyCurve)
+
+    Plotter.params(:pagesize => 'letter')
+
+    Plotter.draw('png', 'RUBYtest3.png')do |p|
+      p.space(0,0, 1000,1000)
+      p.linewidth(0.25)
+      p.pencolor('red')
+      p.move(600, 300)
+      p.draw_curve(0, 400, 0)
+    end
+
+The second example creates a simple animated pseudo-GIF, 150 pixels
+wide and 100 pixels high.
+
+    require 'rubygems'
+    require 'rplot'
+
+    Plotter.params(:bitmapsize => '150x100',
+                   :bg_color => 'orange',
+                   :transparent_color => 'orange',
+                   :gif_iterations => 100,
+                   :gif_delay => 5)
+    p = Plotter.new('gif', 'image.gif')
+    p.open
+    p.space(0,0,149,99)
+    p.pencolor('red')
+    p.linewidth(5)
+    p.filltype(1)
+    p.fillcolor('black')
+    i = 0
+    while i < 180
+      p.erase
+      p.erase
+      p.ellipse(75,50,40,20,i)
+      i += 15
+    end
+    p.delete
 
 <b>{Here the complete documentation with
 API}[http://pioz.github.com/rplot/Plotter.html]</b>.
@@ -54,3 +102,4 @@ send a pull request.
 Copyright (c) 2010 Enrico Pilotto. See
 {LICENSE}[http://github.com/pioz/rplot/blob/master/LICENSE] for
 details.
+
