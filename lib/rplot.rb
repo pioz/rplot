@@ -912,10 +912,382 @@ class Plotter < Rplot
   #-----------------------------#
 
 
+  # +capmod+ sets the cap mode (i.e., cap style) for all paths
+  # subsequently drawn on the graphics display. Recognized styles are
+  # _butt_ (the default), _round_, and _projecting_. The three styles
+  # are visibly distinct only if the line thickness is fairly
+  # large. Butt caps do not extend beyond the end of the path. The
+  # other two kinds do, however. Round caps are filled semicircles,
+  # and projecting caps are filled rectangular regions that extend a
+  # distance equal to half the line width beyond the end of the
+  # path. PCL and HP-GL Plotters support a fourth cap mode,
+  # _triangular_. Plotters other than PCL and HP-GL Plotters treat
+  # _triangular_ as equivalent to _round_. This function has no effect
+  # on Tektronix Plotters. Also, it has no effect on HP-GL Plotters if
+  # the parameter HPGL_VERSION is set to a value less than "2" (the
+  # default).
+  def capmod(s)
+    super(s)
+  end
+
+  # +color+ is a convenience function. Calling +color+ is equivalent
+  # to calling both +pencolor+ and +fillcolor+, to set both the the
+  # pen color and fill color of all objects subsequently drawn on the
+  # graphics display. Note that the physical fill color depends also
+  # on the fill fraction, which is specified by calling +filltype+. If
+  # the first parameter is a string, it is considered as color
+  # name. +green+ and +blue+ parameters may be +nil+.
+  def color(red_or_name, green = nil, blue = nil)
+    if red_or_name.class == Fixnum && green.class == Fixnum && blue.class == Fixnum
+      super(red_or_name, green, blue)
+    else
+      colorname(red_or_name.to_s)
+    end
+  end
+
+  # +fillcolor+ sets the fill color of all objects subsequently drawn
+  # on the graphics display, using a 48-bit RGB color model. The
+  # arguments red, green and blue specify the red, green and blue
+  # intensities of the fill color. Each is an integer in the range
+  # 0x0000...0xffff, i.e., 0...65535. The choice (0, 0, 0) signifies
+  # black, and the choice (65535, 65535, 65535) signifies white. Note
+  # that the physical fill color depends also on the fill fraction,
+  # which is specified by calling +filltype+. If the first parameter
+  # is a string, it is considered as color name. +green+ and +blue+
+  # parameters may be +nil+.
+  def fillcolor(red_or_name, green = nil, blue = nil)
+    if red_or_name.class == Fixnum && green.class == Fixnum && blue.class == Fixnum
+      super(red_or_name, green, blue)
+    else
+      fillcolorname(red_or_name.to_s)
+    end
+  end
+
+  # +fillmod+ sets the fill mode, i.e., fill rule, for all objects
+  # subsequently drawn on the graphics display. The fill rule affects
+  # only filled, self-intersecting paths: it determines which points
+  # are _inside_. Two rules are supported: _even-odd_ (the default for
+  # all Plotters), and _nonzero-winding_. For the distinction, see the
+  # Postscript Language Reference Manual. _alternate_ is an alias for
+  # _even-odd_ and _winding_ is an alias for _nonzero-winding_. Fig
+  # Plotters do not support the _nonzero-winding_ fill rule, because
+  # xfig itself does not support it. Also, HPGL Plotters do not
+  # support it if HPGL_VERSION is set to a value less than "2" (the
+  # default). The LaserJet III, which was Hewlett--Packard's first PCL
+  # 5 printer, did not support the _nonzero-winding_ fill
+  # rule. However, all later PCL 5 printers from Hewlett--Packard
+  # support it.
+  def fillmod(s)
+    super(s)
+  end
+
+  # +filltype+ sets the fill fraction for all subsequently drawn
+  # objects. A value of 0 for level indicates that objects should be
+  # unfilled, or transparent. This is the default. A value in the
+  # range 0x0001...0xffff, i.e., 1...65535, indicates that objects
+  # should be filled. A value of 1 signifies 100% filling (the fill
+  # color will simply be the color specified by calling fillcolor or
+  # fillcolorname). If <tt>level=0xffff</tt>, the fill color will be
+  # white. Values between 0x0001 and 0xffff are interpreted as
+  # specifying a desaturation, or gray level. For example, 0x8000
+  # specifies 50% filling (the fill color will be intermediate between
+  # the color specified by calling fillcolor or fillcolorname, and
+  # white). Tektronix Plotters do not support filling, and HP-GL
+  # Plotters support filling of arbitrary paths only if the parameter
+  # HPGL_VERSION is equal to "1.5" or "2" (the default). (If the
+  # version is "1" then only circles and rectangles aligned with the
+  # coordinate axes may be filled.) Opaque filling, including white
+  # filling, is supported only if the parameter HPGL_VERSION is "2"
+  # and the parameter HPGL_OPAQUE_MODE is "yes" (the default).
+  def filltype(level)
+    super(level)
+  end
+
+  # +fmiterlimit+ sets the miter limit for all paths subsequently
+  # drawn on the graphics display. The miter limit controls the
+  # treatment of corners, if the join mode is set to _miter_ (the
+  # default). At a join point of a path, the <i>miter length</i> is
+  # defined to be the distance between the inner corner and the outer
+  # corner. The miter limit is the maximum value that will be
+  # tolerated for the miter length divided by the line thickness. If
+  # this value is exceeded, the miter will be cut off: the _bevel_
+  # join mode will be used instead. Examples of typical values for
+  # limit are 10.43 (the default, which cuts off miters if the join
+  # angle is less than 11 degrees), 2.0 (the same, for 60 degrees),
+  # and 1.414 (the same, for 90 degrees). In general, the miter limit
+  # is the cosecant of one-half the minimum angle for mitered
+  # joins. The minimum meaningful value for limit is 1.0, which
+  # converts all mitered joins to beveled joins, irrespective of join
+  # angle. Specifying a value less than 1.0 resets the limit to the
+  # default. This function has no effect on X Drawable Plotters or X
+  # Plotters, since the X Window System miter limit, which is also
+  # 10.43, cannot be altered. It also has no effect on Tektronix
+  # Plotters or Fig Plotters, or on HP-GL Plotters if the parameter
+  # HPGL_VERSION is set to a value less than "2" (the default).
+  def fmiterlimit(limit)
+    super(limit)
+  end
+
+  # +fontname+ take a single case-insensitive string argument,
+  # <tt>font_name</tt>, specifying the name of the font to be used for
+  # all text strings subsequently drawn on the graphics display. (The
+  # font for plotting strings is fully specified by calling
+  # +fontname+, +fontsize+, and +textangle+.) The size of the font in
+  # user coordinates is returned. The default font name depends on the
+  # type of Plotter. It is "Helvetica" for all Plotters except PNM,
+  # GIF, HP-GL, Tektronix and Metafile Plotters, for which it is
+  # "HersheySerif". If the argument <tt>font_name</tt> is +nil+ or the
+  # empty string, or the font is not available, the default font name
+  # will be used. Which fonts are available also depends on the type
+  # of Plotter.
+  def fontname(font_name)
+    ffontname(font_name)
+  end
+
+  # +fontsize+ take a single argument, interpreted as the size, in the
+  # user coordinate system, of the font to be used for all text
+  # strings subsequently drawn on the graphics display. (The font for
+  # plotting strings is fully specified by calling fontname, fontsize,
+  # and textangle.) The size of the font in user coordinates is
+  # returned. A negative value for size sets the size to the default,
+  # which depends on the type of Plotter. Typically, the default font
+  # size is 1/50 times the size (i.e., minimum dimension) of the
+  # display.
+  def fontsize(size)
+    ffontsize(size)
+  end
+  
+  # +joinmod+ sets the join mode (i.e., join style) for all paths
+  # subsequently drawn on the graphics display. Recognized styles are
+  # _miter_ (the default), _round_, and _bevel_. The three styles are
+  # visibly distinct only if the line thickness is fairly
+  # large. Mitered joins are sharp, rounded joins are round, and
+  # beveled joins are squared off. However, unusually sharp joins are
+  # never mitered: instead, they are beveled. The angle at which
+  # beveling replaces mitering may be specified by calling
+  # fmiterlimit. PCL and HP-GL Plotters support a fourth join mode,
+  # _triangular_. Plotters other than PCL and HP-GL Plotters treat
+  # _triangular_ as equivalent to _round_. This function has no effect
+  # on Tektronix Plotters. Also, it has no effect on HP-GL Plotters if
+  # the parameter HPGL_VERSION is set to a value less than "2" (the
+  # default).
+  def joinmod(s)
+    super(s)
+  end
+
+  # +linedash+ set the line style for all paths, circles, and ellipses
+  # subsequently drawn on the graphics display. They provide much
+  # finer control of dash patterns than the +linemod+ function (see
+  # below) provides. Dashes should be an array of length +n+. Its
+  # elements, which should be positive, are interpreted as distances
+  # in the user coordinate system. Along any path, circle, or ellipse,
+  # the elements dashes[0]...dashes[n-1] alternately specify the
+  # length of a dash and the length of a gap between dashes. When the
+  # end of the array is reached, the reading of the array wraps around
+  # to the beginning. If the array is empty, i.e., n equals zero,
+  # there is no dashing: the drawn line is solid. The offset argument
+  # specifies the _phase_ of the dash pattern relative to the start of
+  # the path. It is interpreted as the distance into the dash pattern
+  # at which the dashing should begin. For example, if offset equals
+  # zero then the path will begin with a dash, of length dashes[0] in
+  # user space. If offset equals dashes[0] then the path will begin
+  # with a gap of length dashes[1], and so forth. offset is allowed to
+  # be negative. Not all Plotters fully support linedash and
+  # flinedash. HP-GL and PCL Plotters cannot dash with a nonzero
+  # offset, and in the dash patterns used by X and X Drawable
+  # Plotters, each dash and each gap has a maximum length of 255
+  # pixels. linedash and flinedash have no effect on Tektronix and Fig
+  # Plotters, and they have no effect on HP-GL Plotters for which the
+  # parameter HPGL_VERSION is less than "2" (the default; see section
+  # Device driver parameters). Warning: If the map from the user
+  # coordinate system to the device coordinate system is not uniform,
+  # each dash in a dashed path should ideally be drawn on the graphics
+  # display with a length that depends on its direction. But
+  # currently, only Postscript Plotters do this. Other Plotters always
+  # draw any specified dash with the same length, irrespective of its
+  # direction. The length that is used is the minimum length, in the
+  # device coordinate system, that can correspond to the specified
+  # dash length in the user coordinate system.
+  def linedash(dashes, offset)
+    flinedash(dashes.size, dashes, offset)
+  end
+
+  # +linemod+ sets the line style for all paths, circles, and ellipses
+  # subsequently drawn on the graphics display. The supported line
+  # styles are _solid_, _dotted_, _dotdashed_, _shortdashed_,
+  # _longdashed_, _dotdotdashed_, _dotdotdotdashed_, and
+  # _disconnected_. The first seven correspond to the following dash
+  # patterns:
+  #
+  #    "solid"             --------------------------------
+  #    "dotted"            -   -   -   -   -   -   -   -   
+  #    "dotdashed"         ----   -   ----   -   ----   -
+  #    "shortdashed"       ----    ----    ----    ----    
+  #    "longdashed"        -------    -------    -------    
+  #    "dotdotdashed"      ----   -   -   ----   -   -
+  #    "dotdotdotdashed"   ----   -   -   -   ----   -   -   -
+  #
+  # In the preceding patterns, each hyphen stands for one line
+  # thickness. This is the case for sufficiently thick lines, at
+  # least. So for sufficiently thick lines, the distance over which a
+  # dash pattern repeats is scaled proportionately to the line
+  # thickness. The _disconnected_ line style is special. A
+  # _disconnected_ path is rendered as a set of filled circles, each
+  # of which has diameter equal to the nominal line thickness. One of
+  # these circles is centered on each of the juncture points of the
+  # path (i.e., the endpoints of the line segments or arcs from which
+  # it is constructed). Circles and ellipses with _disconnected_ line
+  # style are invisible. Disconnected paths, circles, and ellipses are
+  # not filled. All line styles are supported by all Plotters, with
+  # the following exceptions. HP-GL Plotters do not support the
+  # _dotdotdotdashed_ style unless the parameter HPGL_VERSION is set
+  # to "2" (the default). Tektronix Plotters do not support the
+  # _dotdotdotdashed_ style, and do not support the _dotdotdashed_
+  # style unless the parameter TERM is set to _kermit_.
+  def linemod(s)
+    super(s)
+  end
+
+  # +linewidth+ set the thickness, in the user coordinate system, of
+  # all paths, circles, and ellipses subsequently drawn on the
+  # graphics display. A negative value resets the thickness to the
+  # default. The default thickness depends on the type of Plotter. For
+  # most Plotters, it is 1/850 times the size (i.e., minimum
+  # dimension) of the display. But for Plotters that produce bitmaps,
+  # i.e., X Plotters, X Drawable Plotters, PNM Plotters, and GIF
+  # Plotters, it is zero. By convention, a zero-thickness line is the
+  # thinnest line that can be drawn. However, the drawing editors
+  # idraw and xfig treat zero-thickness lines as invisible. So when
+  # producing editable graphics with a Postscript or Fig Plotter,
+  # using a zero line thickness may not be desirable. Tektronix
+  # Plotters do not support drawing with other than a default
+  # thickness, and HP-GL Plotters do not support doing so if the
+  # parameter HPGL_VERSION is set to a value less than "2" (the
+  # default; see section Device driver parameters). *Warning*: If the
+  # map from the user coordinate system to the device coordinate
+  # system is not uniform, each line segment in a polygonal path
+  # should ideally be drawn on the graphics display with a thickness
+  # that depends on its direction. But currently, only Postscript
+  # Plotters do this. Other Plotters draw all line segments in a path
+  # with the same thickness. The thickness that is used is the minimum
+  # thickness, in the device coordinate system, that can correspond to
+  # the thickness of the path in the user coordinate system.
+  def linewidth(size)
+    flinewidth(size)
+  end
+
+  # +move+ take two arguments specifying the coordinates (x, y) of a
+  # point to which the graphics cursor should be moved. The path under
+  # construction (if any) is ended, and the graphics cursor is moved
+  # to (x, y). This is equivalent to lifting the pen on a plotter and
+  # moving it to a new position, without drawing any line. If +:rel+
+  # option is passed use cursor-relative coordinates.
+  def move(x, y, options = {})
+    if options[:rel]
+      fmoverel(x, y)
+    else
+      fmove(x, y)
+    end
+  end
+ 
+  # +pencolor+ sets the pen color of all objects subsequently drawn on
+  # the graphics display, using a 48-bit RGB color model. The
+  # arguments red, green and blue specify the red, green and blue
+  # intensities of the pen color. Each is an integer in the range
+  # 0x0000...0xffff, i.e., 0...65535. The choice (0, 0, 0) signifies
+  # black, and the choice (65535, 65535, 65535) signifies white. HP-GL
+  # Plotters support drawing with a white pen only if the value of the
+  # parameter HPGL_VERSION is "2" (the default), and the value of the
+  # parameter HPGL_OPAQUE_MODE is "yes" (the default). If the first
+  # parameter is a string, it is considered as color name. +green+ and
+  # +blue+ parameters may be +nil+.
+  def pencolor(red_or_name, green = nil, blue = nil)
+    if red_or_name.class == Fixnum && green.class == Fixnum && blue.class == Fixnum
+      super(red_or_name, green, blue)
+    else
+      pencolorname(red_or_name.to_s)
+    end
+  end
+
+  # +restorestate+ pops the current graphics context off the stack of
+  # drawing states. The graphics context consists largely of libplot's
+  # drawing attributes, which are set by the attribute functions
+  # documented in this doc. So popping off the graphics context
+  # restores the drawing attributes to values they previously had. A
+  # path under construction is regarded as part of the graphics
+  # context. For this reason, calling +restorestate+ automatically
+  # calls +endpath+ to terminate the path under construction, if
+  # any. All graphics contexts on the stack are popped off when
+  # +close+ is called, as if +restorestate+ had been called
+  # repeatedly.
+  def restorestate()
+    super
+  end
+
+  # +savestate+ pushes the current graphics context onto the stack of
+  # drawing states. The graphics context consists largely of libplot's
+  # drawing attributes, which are set by the attribute functions
+  # documented in this doc. A path under construction, if any, is
+  # regarded as part of the graphics context. That is because paths
+  # may be drawn incrementally, one line segment or arc at a
+  # time. When a graphics context is returned to, the path under
+  # construction may be continued.
+  def savestate()
+    super
+  end
+
+  # +textangle+ take one argument, which specifies the +angle+ in
+  # degrees counterclockwise from the x (horizontal) axis in the user
+  # coordinate system, for text strings subsequently drawn on the
+  # graphics display. The default angle is zero. (The font for
+  # plotting strings is fully specified by calling +fontname+,
+  # +fontsize+, and +textangle+.) The size of the font for plotting
+  # strings, in user coordinates, is returned.
+  def textangle(angle)
+    ftextangle(angle)
+  end
+
+
   #-------------------#
   # Mapping functions #
   #-------------------#
 
+
+  # Apply a Postscript-style transformation matrix, i.e., affine map,
+  # to the user coordinate system. That is, apply the linear
+  # transformation defined by the two-by-two matrix <tt>[m0 m1 m2
+  # m3]</tt> to the user coordinate system, and also translate by +tx+
+  # units in the x direction and +ty+ units in the y direction,
+  # relative to the former user coordinate system. The following three
+  # functions (+rotate+, +scale+, +translate+) are convenience
+  # functions that are special cases of +concat+.
+  def concat(m0, m1, m2, m3, tx, ty)
+    fconcat(m0, m1, m2, m3, tx, ty)
+  end
+
+  # Rotate the user coordinate system axes about their origin by
+  # +theta+ degrees, with respect to their former orientation. The
+  # position of the user coordinate origin and the size of the x and y
+  # units remain unchanged.
+  def rotate(theta)
+    frotate(theta)
+  end
+
+  # Make the x and y units in the user coordinate system be the size
+  # of +sx+ and +sy+ units in the former user coordinate system. The
+  # position of the user coordinate origin and the orientation of the
+  # coordinate axes are unchanged.
+  def scale(sx, sy)
+    fscale(sx, sy)
+  end
+
+  # Move the origin of the user coordinate system by +tx+ units in the
+  # x direction and +ty+ units in the y direction, relative to the
+  # former user coordinate system. The size of the x and y units and
+  # the orientation of the coordinate axes are unchanged.
+  def translate(tx, ty)
+    ftranslate(tx, ty)
+  end
 
 end
 
