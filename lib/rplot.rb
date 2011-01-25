@@ -1,5 +1,5 @@
-require 'ext/rplot'
-
+#require 'ext/rplot'
+require File.expand_path('../../ext/rplot', __FILE__)
 # This class rappresents a Plotter.
 #
 # The graphical objects that libplot can draw include paths, circles and
@@ -501,6 +501,12 @@ class Plotter < Rplot
     self.delete
   end
 
+
+  #-----------------#
+  # Setup functions #
+  #-----------------#
+
+
   # Open a Plotter, i.e., begins a page of graphics. This resets the Plotter's
   # drawing attributes to their default values. A negative return value
   # indicates the Plotter could not be opened. Currently, an X Plotter pops up
@@ -613,6 +619,12 @@ class Plotter < Rplot
     super
   end
 
+
+  #--------------------------#
+  # Object-drawing functions #
+  #--------------------------#
+
+
   # +alabel+ takes three arguments +horiz_justify+, +vert_justify+, and +s+,
   # which specify an <i>adjusted label</i>, i.e., a justified text string. The
   # path under construction (if any) is ended, and the string +s+ is drawn
@@ -634,10 +646,276 @@ class Plotter < Rplot
     super(horiz_justify, vert_justify, s.to_s)
   end
 
-
-  def line(x0, y0, x1, y1)
-    fline(x0.to_f, y0.to_f, x1.to_f, y1.to_f)
+  # +arc+ take six arguments specifying the beginning (x0, y0), end
+  # (x1, y1), and center (xc, yc) of a circular arc. If the graphics
+  # cursor is at (x0, y0) and a path is under construction, then the
+  # arc is added to the path. Otherwise the current path (if any) is
+  # ended, and the arc begins a new path. In all cases the graphics
+  # cursor is moved to (x1, y1). The direction of the arc (clockwise
+  # or counterclockwise) is determined by the convention that the arc,
+  # centered at (xc, yc), sweep through an angle of at most 180
+  # degrees. If the three points appear to be collinear, the direction
+  # is taken to be counterclockwise. If (xc, yc) is not equidistant
+  # from (x0, y0) and (x1, y1) as it should be, it is corrected by
+  # being moved to the closest point on the perpendicular bisector of
+  # the line segment joining (x0, y0) and (x1, y1). If +:rel+ option
+  # is passed use cursor-relative coordinates.
+  def arc(xc, yc, x0, y0, x1, y1, options = {})
+    if options[:rel]
+      farcrel(xc, yc, x0, y0, x1, y1)
+    else
+      farc(xc, yc, x0, y0, x1, y1)
+    end
   end
+
+  # +bezier2+ take six arguments specifying the beginning p0=(x0, y0)
+  # and end p2=(x2, y2) of a quadratic Bezier curve, and its
+  # intermediate control point p1=(x1, y1). If the graphics cursor is
+  # at p0 and a path is under construction, then the curve is added to
+  # the path. Otherwise the current path (if any) is ended, and the
+  # curve begins a new path. In all cases the graphics cursor is moved
+  # to p2. If +:rel+ option is passed use cursor-relative coordinates.
+  # The quadratic Bezier curve is tangent at p0 to the line segment
+  # joining p0 to p1, and is tangent at p2 to the line segment joining
+  # p1 to p2. So it fits snugly into a triangle with vertices p0, p1,
+  # and p2. When using a PCL Plotter to draw Bezier curves on a
+  # LaserJet III, you should set the parameter PCL_BEZIERS to
+  # "no". That is because the LaserJet III, which was
+  # Hewlett--Packard's first PCL 5 printer, does not recognize the
+  # Bezier instructions supported by later PCL 5 printers.
+  def bezier2(x0, y0, x1, y1, x2, y2, options = {})
+    if options[:rel]
+      fbezier2rel(x0, y0, x1, y1, x2, y2)
+    else
+      fbezier2(x0, y0, x1, y1, x2, y2)
+    end
+  end
+
+  # +bezier3+ take eight arguments specifying the beginning p0=(x0,
+  # y0) and end p3=(x3, y3) of a cubic Bezier curve, and its
+  # intermediate control points p1=(x1, y1) and p2=(x2, y2). If the
+  # graphics cursor is at p0 and a path is under construction, then
+  # the curve is added to the path. Otherwise the current path (if
+  # any) is ended, and the curve begins a new path. In all cases the
+  # graphics cursor is moved to p3. If +:rel+ option is passed use
+  # cursor-relative coordinates. The cubic Bezier curve is tangent at
+  # p0 to the line segment joining p0 to p1, and is tangent at p3 to
+  # the line segment joining p2 to p3. So it fits snugly into a
+  # quadrangle with vertices p0, p1, p2, and p3. When using a PCL
+  # Plotter to draw Bezier curves on a LaserJet III, you should set
+  # the parameter PCL_BEZIERS to "no". That is because the LaserJet
+  # III, which was Hewlett--Packard's first PCL 5 printer, does not
+  # recognize the Bezier instructions supported by later PCL 5
+  # printers.
+  def bezier3(x0, y0, x1, y1, x2, y2, x3, y3, options = {})
+    if options[:rel]
+      fbezier3rel(x0, y0, x1, y1, x2, y2, x3, y3)
+    else
+      fbezier3(x0, y0, x1, y1, x2, y2, x3, y3)
+    end
+  end
+
+  # +box+ take four arguments specifying the lower left corner (x1,
+  # y1) and upper right corner (x2, y2) of a _box_, or rectangle. The
+  # path under construction (if any) is ended, and the box is drawn as
+  # a new path. This path is also ended, and the graphics cursor is
+  # moved to the midpoint of the box. If +:rel+ option is passed use
+  # cursor-relative coordinates.
+  def box(x1, y1, x2, y2, options = {})
+    if options[:rel]
+      fboxrel(x1, y1, x2, y2)
+    else
+      fbox(x1, y1, x2, y2)
+    end
+  end
+
+  # +circle+ take three arguments specifying the center (xc, yc) and
+  # radius (r) of a circle. The path under construction (if any) is
+  # ended, and the circle is drawn. The graphics cursor is moved to
+  # (xc, yc). If +:rel+ option is passed use cursor-relative
+  # coordinates.
+  def circle(xc, yc, r, options = {})
+    if options[:rel]
+      fcirclerel(xc, yc, r)
+    else
+      fcircle(xc, yc, r)
+    end
+  end
+
+  # +cont+ take two arguments specifying the coordinates (x, y) of a
+  # point. If a path is under construction, the line segment from the
+  # current graphics cursor position to the point (x, y) is added to
+  # it. Otherwise the line segment begins a new path. In all cases the
+  # graphics cursor is moved to (x, y). If +:rel+ option is passed use
+  # cursor-relative coordinates.
+  def cont(x, y, options = {})
+    if options[:rel]
+      fcontrel(x, y)
+    else
+      fcont(x, y)
+    end
+  end
+
+  # +ellarc+ take six arguments specifying the three points
+  # pc=(xc,yc), p0=(x0,y0), and p1=(x1,y1) that define a so-called
+  # quarter ellipse. This is an elliptic arc from p0 to p1 with center
+  # pc. If the graphics cursor is at point p0 and a path is under
+  # construction, the quarter-ellipse is added to it. Otherwise the
+  # path under construction (if any) is ended, and the quarter-ellipse
+  # begins a new path. In all cases the graphics cursor is moved to
+  # p1. The quarter-ellipse is an affinely transformed version of a
+  # quarter circle. It is drawn so as to have control points p0, p1,
+  # and p0+p1-pc. This means that it is tangent at p0 to the line
+  # segment joining p0 to p0+p1-pc, and is tangent at p1 to the line
+  # segment joining p1 to p0+p1-pc. So it fits snugly into a triangle
+  # with these three control points as vertices. Notice that the third
+  # control point is the reflection of pc through the line joining p0
+  # and p1. If +:rel+ option is passed use cursor-relative
+  # coordinates.
+  def ellarc(xc, yc, x0, y0, x1, y1, options = {})
+    if options[:rel]
+      fellarcrel(xc, yc, x0, y0, x1, y1)
+    else
+      fellarc(xc, yc, x0, y0, x1, y1)
+    end
+  end
+
+  # +ellipse+ take five arguments specifying the center (xc, yc) of an
+  # ellipse, the lengths of its semiaxes (rx and ry), and the
+  # inclination of the first semiaxis in the counterclockwise
+  # direction from the x axis in the user coordinate system. The path
+  # under construction (if any) is ended, and the ellipse is
+  # drawn. The graphics cursor is moved to (xc, yc). If +:rel+ option
+  # is passed use cursor-relative coordinates.
+  def ellipse(xc, yc, rx, ry, angle, options = {})
+    if options[:rel]
+      fellipserel(xc, yc, rx, ry, angle)
+    else
+      fellipse(xc, yc, rx, ry, angle)
+    end
+  end
+
+  # +endpath+ terminates the path under construction, if any. A path
+  # is constructed by one or more successive calls to +cont+, +line+,
+  # +arc+, +ellarc+, +bezier2+ and +bezier3+. The path will also be
+  # terminated if any non-path object is drawn, if any path-related
+  # drawing attribute is set, or if +move+ is invoked to set the
+  # cursor position. So +endpath+ is almost redundant. However, if a
+  # Plotter plots objects in real time, calling +endpath+ will ensure
+  # that a constructed path is drawn on the graphics display without
+  # delay.
+  def endpath()
+    super
+  end
+
+  # +label+ takes a single string argument +s+ and draws the text
+  # contained in +s+ at the current graphics cursor position. The text
+  # is left justified, and the graphics cursor is moved to the right
+  # end of the string. This function is provided for backward
+  # compatibility; the function call <tt>label(s)</tt> is equivalent
+  # to <tt>alabel('l', 'x', s)</tt>.
+  def label(s)
+    super(s)
+  end
+
+  # +labelwidth+ compute and return the width of a string in the
+  # current font, in the user coordinate system. The string is not
+  # plotted.
+  def labelwidth(s)
+    flabelwidth(s)
+  end
+
+  # +line+ take four arguments specifying the start point (x1, y1) and
+  # end point (x2, y2) of a line segment. If the graphics cursor is at
+  # (x1, y1) and a path is under construction, the line segment is
+  # added to it. Otherwise the path under construction (if any) is
+  # ended, and the line segment begins a new path. In all cases the
+  # graphics cursor is moved to (x2, y2). If +:rel+ option is passed
+  # use cursor-relative coordinates.
+  def line(x1, y1, x2, y2, options = {})
+    if options[:rel]
+      flinerel(x1, y1, x2, y2)
+    else
+      fline(x1, y1, x2, y2)
+    end
+  end
+
+  # +marker+ take four arguments specifying the location (x,y) of a
+  # marker symbol, its type, and its size in user coordinates. The
+  # path under construction (if any) is ended, and the marker symbol
+  # is plotted. The graphics cursor is moved to (x,y). If +:rel+
+  # option is passed use cursor-relative coordinates for the position
+  # (x,y). Marker symbol types 0 through 31 are taken from a standard
+  # set, and marker symbol types 32 and above are interpreted as the
+  # index of a character in the current text font. These are the
+  # symbols:
+  # 1. dot
+  # 2. plus (+)
+  # 3. asterisk (*)
+  # 4. circle
+  # 5. cross
+  # 6. square
+  # 7. triangle
+  # 8. diamond
+  # 9. star
+  # 10. inverted triangle
+  # 11. starburst
+  # 12. fancy plus
+  # 13. fancy cross
+  # 14. fancy square
+  # 15. fancy diamond
+  # 16. filled circle
+  # 17. filled square
+  # 18. filled triangle
+  # 19. filled diamond
+  # 20. filled inverted triangle
+  # 21. filled fancy square
+  # 22. filled fancy diamond
+  # 23. half filled circle
+  # 24. half filled square
+  # 25. half filled triangle
+  # 26. half filled diamond
+  # 27. half filled inverted triangle
+  # 28. half filled fancy square
+  # 29. half filled fancy diamond
+  # 30. octagon
+  # 31. filled octagon
+  # The interpretation of marker symbols 1 through 5 is the same as in
+  # the well known GKS (Graphical Kernel System). Symbols 32 and up
+  # are interpreted as characters in a certain text font.
+  def marker(x, y, type, size, options = {})
+    if options[:rel]
+      fmarkerrel(x, y, type, size)
+    else
+      fmarker(x, y, type, size)
+    end
+  end
+
+  # +point+ take two arguments specifying the coordinates (x, y) of a
+  # point. The path under construction (if any) is ended, and the
+  # point is plotted. (Plotters that produce bitmaps draw points as
+  # single pixels. Other Plotters draw them as small solid circles,
+  # usually the smallest that can be plotted.) The graphics cursor is
+  # moved to (x, y). If +:rel+ option is passed use cursor-relative
+  # coordinates.
+  def point(x, y, options = {})
+    if options[:rel]
+      fpointrel(x, y)
+    else
+      fpoint(x, y)
+    end
+  end
+
+
+  #-----------------------------#
+  # Attribute-setting functions #
+  #-----------------------------#
+
+
+  #-------------------#
+  # Mapping functions #
+  #-------------------#
+
 
 end
 
