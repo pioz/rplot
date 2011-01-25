@@ -5,6 +5,7 @@ pkg/*
 bin
 ext/Makefile
 ext/*.bundle
+ext/*.log
 ext/*.o
 ext/*.so
 rdoc/
