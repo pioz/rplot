@@ -1,0 +1,56 @@
+= rplot
+
+*rplot* is a C extension for Ruby of GNU libplot.
+
+{GNU
+libplot}[http://www.gnu.org/software/plotutils/manual/html_mono/plotutils.html#SEC45]
+is a free function library for drawing two-dimensional vector
+graphics. It can produce smooth, double-buffered animations for the X
+Window System, and can export files in many graphics file formats. It
+is `device-independent' in the sense that its API (application
+programming interface) is to a large extent independent of the display
+type or output format. Rplot is a C extension for Ruby of GNU libplot.
+
+== Requirements
+
+* libplot-dev
+
+For Debian/Ubuntu users: <tt>apt-get install libplot-dev</tt>.
+
+For Max OS X users use {port}[http://www.macports.org/]: <tt>port
+install plotutils</tt>.
+
+== Installation
+
+    gem install rplot
+
+== Usage
+
+Here two little examples:
+
+    line1
+    line2
+    ...
+    TODO
+
+and
+
+    line1
+    line2
+    ...
+    TODO
+
+<b>{Here the complete documentation with
+API}[http://pioz.github.com/rplot/Plotter.html]</b>.
+
+== Questions or problems?
+
+If you have any issues with rplot please add an {issue on
+GitHub}[https://github.com/pioz/rplot/issues] or fork the project and
+send a pull request.
+
+== Copyright
+
+Copyright (c) 2010 Enrico Pilotto. See
+{LICENSE}[http://github.com/pioz/rplot/blob/master/LICENSE] for
+details.
