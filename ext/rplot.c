@@ -901,10 +901,10 @@ Init_rplot ()
   rb_define_protected_method (rplot, "fellarc", fellarc, 6);
   rb_define_protected_method (rplot, "ellarcrel", ellarcrel, 6);
   rb_define_protected_method (rplot, "fellarcrel", fellarcrel, 6);
-  rb_define_protected_method (rplot, "ellipse", ellipse, 6);
-  rb_define_protected_method (rplot, "fellipse", fellipse, 6);
-  rb_define_protected_method (rplot, "ellipserel", ellipserel, 6);
-  rb_define_protected_method (rplot, "fellipserel", fellipserel, 6);
+  rb_define_protected_method (rplot, "ellipse", ellipse, 5);
+  rb_define_protected_method (rplot, "fellipse", fellipse, 5);
+  rb_define_protected_method (rplot, "ellipserel", ellipserel, 5);
+  rb_define_protected_method (rplot, "fellipserel", fellipserel, 5);
   rb_define_protected_method (rplot, "endpath", endpath, 0);
   rb_define_protected_method (rplot, "label", label, 1);
   rb_define_protected_method (rplot, "labelwidth", labelwidth, 1);
