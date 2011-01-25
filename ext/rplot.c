@@ -701,17 +701,27 @@ joinmod (VALUE self, VALUE s)
 static VALUE
 linedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  return INT2FIX (pl_linedash (FIX2INT (n),
-                               DATA_PTR (dashes),
-                               FIX2INT (offset)));
+  int size = RARRAY (dashes)->len; // Use n instead?
+  VALUE *dashes_p = RARRAY (dashes)->ptr;
+  int c_dashes[size];
+  int i;
+  for (i = 0; i < size; i++)
+    c_dashes[i] = FIX2INT(dashes_p[i]);
+
+  return INT2FIX (pl_linedash (size, c_dashes, FIX2INT (offset)));
 }
 
 static VALUE
 flinedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  return INT2FIX (pl_flinedash (FIX2INT (n),
-                                DATA_PTR (dashes),
-                                NUM2DBL (offset)));
+  int size = RARRAY (dashes)->len; // Use n instead?
+  VALUE *dashes_p = RARRAY (dashes)->ptr;
+  double c_dashes[size];
+  int i;
+  for (i = 0; i < size; i++)
+    c_dashes[i] = NUM2DBL(dashes_p[i]);
+
+  return INT2FIX (pl_flinedash (size, c_dashes, NUM2DBL (offset)));
 }
 
 static VALUE
