@@ -701,8 +701,8 @@ joinmod (VALUE self, VALUE s)
 static VALUE
 linedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  int size = RARRAY (dashes)->len; // Use n instead?
-  VALUE *dashes_p = RARRAY (dashes)->ptr;
+  int size = RARRAY_LEN (dashes); // Use n instead?
+  VALUE *dashes_p = RARRAY_PTR (dashes);
   int c_dashes[size];
   int i;
   for (i = 0; i < size; i++)
@@ -714,8 +714,8 @@ linedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 static VALUE
 flinedash (VALUE self, VALUE n, VALUE dashes, VALUE offset)
 {
-  int size = RARRAY (dashes)->len; // Use n instead?
-  VALUE *dashes_p = RARRAY (dashes)->ptr;
+  int size = RARRAY_LEN (dashes); // Use n instead?
+  VALUE *dashes_p = RARRAY_PTR (dashes);
   double c_dashes[size];
   int i;
   for (i = 0; i < size; i++)
